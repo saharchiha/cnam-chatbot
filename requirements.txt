@@ -1,0 +1,38 @@
+# Core LLM & RAG
+langchain==0.2.16
+langchain-community==0.2.16
+langchain-groq==0.1.9
+langchain-huggingface==0.0.3
+
+# Vector Store
+faiss-cpu==1.12.0
+
+# PDF Processing
+pymupdf==1.24.9
+pdfplumber==0.11.4
+pypdf==4.3.1
+
+# Web Scraping
+requests==2.32.3
+beautifulsoup4==4.12.3
+selenium==4.23.1  # si besoin de JS rendering
+
+# Web Search
+duckduckgo-search==6.2.13
+
+# Embeddings HuggingFace (alternative gratuite)
+sentence-transformers==3.0.1
+
+# UI
+streamlit==1.37.0
+
+# API
+fastapi==0.112.0
+uvicorn==0.30.6
+python-multipart==0.0.9
+
+# Utils
+python-dotenv==1.0.1
+tqdm==4.66.5
+loguru==0.7.2
+pydantic==2.8.2

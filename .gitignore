@@ -1,0 +1,19 @@
+# Environnements
+.venv310/
+env310/
+__pycache__/
+*.pyc
+
+# Secrets
+.env310
+
+# Streamlit
+.streamlit/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Vector DB / embeddings
+data/
+vectorstore/
