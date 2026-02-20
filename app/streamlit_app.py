@@ -70,21 +70,11 @@ with st.sidebar:
         st.markdown("## 🏥 CNAM Tunisie")
 
     st.markdown("---")
-    st.markdown("### ⚙️ Options")
-
-    use_web_search = st.toggle(
-        "🌐 Recherche Web",
-        value=True,
-        help="Activer la recherche en ligne pour compléter les PDFs"
-    )
-
-    show_sources = st.toggle(
-        "📎 Afficher les sources",
-        value=True
-    )
-
-    st.markdown("---")
     st.markdown("### 📊 Statut du Système")
+
+    # Paramètres fixes : web search toujours actif, sources masquées
+    use_web_search = True
+    show_sources = False
 
     if vectorstore_exists():
         st.success("✅ Base de données PDFs chargée")
