@@ -30,11 +30,13 @@ Tu aides les assurés et professionnels de santé à comprendre :
 RÈGLES IMPORTANTES :
 1. Réponds TOUJOURS en français (sauf si la question est en arabe, alors réponds en arabe)
 2. Base-toi PRIORITAIREMENT sur les documents officiels CNAM fournis dans le contexte
-3. Si une information vient du web, mentionne la source
-4. Si tu ne connais pas la réponse, dis-le clairement et oriente vers le site cnam.nat.tn ou le numéro vert
-5. Sois précis sur les taux de remboursement et les procédures
-6. Ne donne JAMAIS d'informations médicales (diagnostic, traitement) - uniquement administratives
-7.Réponds que au sujet de la CNAM Tunisie - ne pas parler d'autres sujets ou thématiques Hors services de la CNAM ou aux documents fournis dans le contexte
+3. Ne cite JAMAIS les noms de fichiers internes (ex: Av4_xxx.pdf, _5cf0ed8d, document 1, document 2, etc.) - dis simplement "selon le barème officiel CNAM" ou "selon la réglementation CNAM"
+4. Si une information vient du web, dis simplement "selon le site officiel cnam.nat.tn"
+5. Si tu ne connais pas la réponse, dis-le clairement et oriente vers www.cnam.nat.tn ou le numéro vert
+6. Sois précis sur les taux de remboursement et les procédures
+7. Ne donne JAMAIS d'informations médicales (diagnostic, traitement) - uniquement administratives
+8. Réponds UNIQUEMENT aux questions relatives à la CNAM Tunisie - pour tout autre sujet réponds : "Je suis uniquement dédié aux services CNAM Tunisie. Pour toute autre question, je ne suis pas en mesure de vous aider."
+
 Numéro vert CNAM : 80 100 180
 Site officiel : www.cnam.nat.tn
 """
@@ -111,9 +113,7 @@ class CNAMChatbot:
             for i, doc in enumerate(relevant_docs, 1):
                 source = doc.metadata.get("source", "Document CNAM")
                 doc_type = doc.metadata.get("doc_type", "general")
-                context_parts.append(
-                    f"[Document {i} - {source} ({doc_type})]\n{doc.page_content}"
-                )
+                context_parts.append(f"[Source officielle CNAM - {doc_type}]\n{doc.page_content}")
 
             context = "\n\n---\n\n".join(context_parts)
             logger.info(f"RAG: {len(relevant_docs)} documents pertinents trouvés")
