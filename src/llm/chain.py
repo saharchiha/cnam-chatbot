@@ -16,6 +16,7 @@ from src.utils.config import (
 )
 from src.search.web_search import search_cnam_web, format_web_results
 from src.retrieval.vectorstore import load_vectorstore, vectorstore_exists
+from src.retrieval.smart_retriever import smart_search
 
 
 # ── Prompt System CNAM ───────────────────────────────────────────────────────
@@ -49,7 +50,12 @@ USER_PROMPT_TEMPLATE = """CONTEXTE DOCUMENTS CNAM:
 QUESTION DE L'ASSURÉ:
 {question}
 
-Réponds de manière claire, précise et structurée. Si pertinent, indique les étapes à suivre."""
+INSTRUCTIONS DE RÉPONSE :
+- Si le contexte contient des tarifs, montants ou prix → cite-les OBLIGATOIREMENT avec les chiffres exacts en dinars
+- Si le contexte contient des codes d'actes → mentionne uniquement si utile pour l'assuré
+- Ne dis JAMAIS "consultez le barème" si les informations sont déjà présentes dans le contexte ci-dessus
+- Réponds directement avec les chiffres disponibles dans le contexte
+- Structure ta réponse clairement avec les montants précis"""
 
 
 class CNAMChatbot:
@@ -108,12 +114,13 @@ class CNAMChatbot:
             if not relevant_docs:
                 relevant_docs = [doc for doc, _ in docs_with_scores[:3]]
 
-            # Formater le contexte
+            # Formater le contexte SANS noms de fichiers internes
             context_parts = []
             for i, doc in enumerate(relevant_docs, 1):
-                source = doc.metadata.get("source", "Document CNAM")
                 doc_type = doc.metadata.get("doc_type", "general")
-                context_parts.append(f"[Source officielle CNAM - {doc_type}]\n{doc.page_content}")
+                context_parts.append(
+                    f"[Source CNAM - {doc_type}]\n{doc.page_content}"
+                )
 
             context = "\n\n---\n\n".join(context_parts)
             logger.info(f"RAG: {len(relevant_docs)} documents pertinents trouvés")
@@ -136,10 +143,22 @@ class CNAMChatbot:
         """
         logger.info(f"Question reçue : {question[:80]}...")
 
-        # 1. RAG - Recherche dans les PDFs
+        # 1. Smart Search - Recherche ciblée dans les PDFs par mots-clés
+        smart_context = smart_search(question)
+
+        # 2. RAG FAISS - Recherche sémantique
         rag_docs, rag_context = self.retrieve_from_rag(question)
 
-        # 2. Web Search - Recherche en ligne
+        # Combiner les deux contextes (smart search en priorité)
+        combined_rag = ""
+        if smart_context:
+            combined_rag = smart_context
+            if rag_context:
+                combined_rag += "\n\n---\n\n" + rag_context
+        else:
+            combined_rag = rag_context
+
+        # 3. Web Search - Recherche en ligne
         web_results = []
         web_context = ""
         if use_web_search:
@@ -147,12 +166,12 @@ class CNAMChatbot:
             if web_results:
                 web_context = format_web_results(web_results)
 
-        # 3. Construire le prompt
-        if not rag_context and not web_context:
-            rag_context = "Aucun document spécifique trouvé. Répondre avec les connaissances générales sur la CNAM Tunisie."
+        # 4. Construire le prompt
+        if not combined_rag and not web_context:
+            combined_rag = "Aucun document spécifique trouvé. Répondre avec les connaissances générales sur la CNAM Tunisie."
 
         user_message = USER_PROMPT_TEMPLATE.format(
-            rag_context=rag_context or "Aucun document RAG disponible.",
+            rag_context=combined_rag or "Aucun document RAG disponible.",
             web_context=web_context,
             question=question,
         )
