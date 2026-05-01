@@ -22,6 +22,7 @@ cnam-chatbot/
 ├── app/
 │   ├── streamlit_app.py        # Streamlit user interface
 │   └── api.py                  # FastAPI REST API
+│   ├── logo_cnam.jpg           # CNAM logo
 ├── scripts/
 │   └── ingest_all.py           # Ingestion pipeline (scraping → vectorstore)
 ├── src/
@@ -36,13 +37,6 @@ cnam-chatbot/
 │   │   └── web_search.py       # DuckDuckGo web search
 │   └── utils/
 │       └── config.py           # Configuration and paths
-├── data/
-│   ├── raw_pdfs/               # PDFs downloaded from CNAM
-│   ├── processed/              # Extracted JSON chunks
-│   └── vectorstore/
-│       ├── index.faiss         # FAISS index
-│       └── index.pkl           # Metadata
-├── logo_cnam.jpg
 ├── requirements.txt
 ├── .env                        # Environment variables (not versioned)
 └── README.md
