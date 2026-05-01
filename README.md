@@ -158,7 +158,7 @@ Content-Type: application/json
 
 | Composant | Technologie |
 |-----------|-------------|
-| LLM | Groq (LLaMA 3 / Mixtral) |
+| LLM | Groq (lama-3.3-70b-versatile) |
 | Orchestration | LangChain |
 | Embeddings | HuggingFace Sentence Transformers |
 | Vector Store | FAISS |
