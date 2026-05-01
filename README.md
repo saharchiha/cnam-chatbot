@@ -10,7 +10,7 @@ Assistant intelligent basé sur la **Retrieval-Augmented Generation (RAG)** pour
 - 🌐 **Web Search** — Complément via DuckDuckGo si les PDFs ne suffisent pas
 - 💬 **Interface Streamlit** — Chat interactif bilingue (FR / AR)
 - ⚡ **API REST FastAPI** — Intégration dans d'autres applications
-- 🧠 **LLM Groq** — Inférence rapide (LLaMA 3 / Mixtral)
+- 🧠 **LLM Groq** — Inférence rapide (LLaMA 3)
 - 📦 **VectorStore FAISS** — Recherche sémantique locale
 
 ---
